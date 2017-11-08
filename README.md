@@ -19,7 +19,7 @@ Add the dependency in build.gradle (App module)
 
 ```gradle
 dependencies {
-	compile 'com.github.felixsoares:BottomNav:1.0'
+	compile 'com.github.felixsoares:BottomNavygation:1.0'
 }
 ```
 
