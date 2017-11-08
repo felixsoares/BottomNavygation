@@ -33,7 +33,7 @@ In your layout file
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.felix.bottomnavy.BottomNav
+    <com.felix.bottomnavygation.BottomNav
         android:id="@+id/bottomNav"
         android:background="@color/gray"
         android:layout_alignParentBottom="true"
