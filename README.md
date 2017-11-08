@@ -111,7 +111,7 @@ BottomNav bottomNav = findViewById(R.id.bottomNav);
 bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore));
 bottomNav.build();
 
-selectTab(0)
+bottomNav.selectTab(0);
 ```
 
 7) Icon tab Active (change icon when select)
