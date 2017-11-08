@@ -19,7 +19,7 @@ Add the dependency in build.gradle (App module)
 
 ```gradle
 dependencies {
-	compile 'com.github.felixsoares:BottomNavygation:1.0'
+	compile 'com.github.felixsoares:BottomNavygation:1.5'
 }
 ```
 
@@ -101,5 +101,23 @@ bottomNav.build();
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
 bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore).addColorAtive(R.color.colorAccent).addColorInative(R.color.colorPrimary));
+bottomNav.build();
+```
+
+6) Select especific Tab
+
+```java
+BottomNav bottomNav = findViewById(R.id.bottomNav);
+bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore));
+bottomNav.build();
+
+selectTab(0)
+```
+
+7) Icon tab Active (change icon when select)
+
+```java
+BottomNav bottomNav = findViewById(R.id.bottomNav);
+bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore, R.mipmap.explore_ative));
 bottomNav.build();
 ```
