@@ -164,6 +164,7 @@ public class ItemNav extends LinearLayout {
                     dr.setCornerRadius(Math.max(myBitmap.getWidth(), myBitmap.getHeight()) / 2.0f);
 
                     RoundedImageView roundView = new RoundedImageView(getContext());
+                    roundView.setImageDrawable(dr);
                     roundView.setLayoutParams(this.imageView.getLayoutParams());
                     roundView.setId(this.imageView.getId());
                     roundView.setPadding(
@@ -171,9 +172,11 @@ public class ItemNav extends LinearLayout {
                             this.imageView.getPaddingRight(),this.imageView.getPaddingBottom()
                     );
 
-                    roundView.setImageDrawable(dr);
+                    removeView(this.imageView);
 
                     this.imageView = roundView;
+
+                    addView(imageView);
                 }
             } else {
                 setIconInImageView(imageIcon);
