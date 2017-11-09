@@ -37,34 +37,56 @@ public class ItemNav extends LinearLayout {
 
     private Boolean isProfile = false;
 
+    private RoundedImageView roundedImageView;
     private ImageView imageView;
     private RelativeLayout relativeLayout;
     private TextView textView;
 
+    public ItemNav(Context context, @NonNull int imagem, String titulo, boolean isProfile) {
+        super(context);
+        init(imagem, titulo, 0, isProfile);
+    }
+
+    public ItemNav(Context context, @NonNull int imagem, int imageIconActive, String titulo, boolean isProfile) {
+        super(context);
+        init(imagem, titulo, imageIconActive, isProfile);
+    }
+
+    public ItemNav(Context context, @NonNull int imagem, int imageIconActive, boolean isProfile) {
+        super(context);
+        init(imagem, "", imageIconActive, isProfile);
+    }
+
+    public ItemNav(Context context, @NonNull int imagem, boolean isProfile) {
+        super(context);
+        init(imagem, "", 0, isProfile);
+    }
+
     public ItemNav(Context context, @NonNull int imagem, String titulo) {
         super(context);
-        init(imagem, titulo, 0);
+        init(imagem, titulo, 0, false);
     }
 
     public ItemNav(Context context, @NonNull int imagem, int imageIconActive, String titulo) {
         super(context);
-        init(imagem, titulo, imageIconActive);
+        init(imagem, titulo, imageIconActive, false);
     }
 
     public ItemNav(Context context, @NonNull int imagem, int imageIconActive) {
         super(context);
-        init(imagem, "", imageIconActive);
+        init(imagem, "", imageIconActive, false);
     }
 
     public ItemNav(Context context, @NonNull int imagem) {
         super(context);
-        init(imagem, "", 0);
+        init(imagem, "", 0, false);
     }
 
-    private void init(int imagem, String titulo, int imageIconActive) {
+    private void init(int imagem, String titulo, int imageIconActive, boolean isProfile) {
         this.imageIcon = imagem;
         this.imageIconActive = imageIconActive;
         this.titulo = titulo;
+        this.isProfile = isProfile;
 
         addComponent();
     }
@@ -108,9 +130,19 @@ public class ItemNav extends LinearLayout {
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         this.relativeLayout.setLayoutParams(layoutParams);
 
+        if(isProfile()){
+            createRoundedImage();
+        }else {
+            createImageView();
+        }
+
+        addView(relativeLayout);
+    }
+
+    private void createImageView(){
         this.imageView = new ImageView(getContext());
         this.imageView.setId(new Random().nextInt(10));
-        this.imageView.setPadding(5,5,5,5);
+        this.imageView.setPadding(5, 5, 5, 5);
         this.imageView.setLayoutParams(new RelativeLayout.LayoutParams(Util.convertDpToPixel(Util.VALUE_SIZE, getContext()), Util.convertDpToPixel(Util.VALUE_SIZE, getContext())));
 
         setIconInImageView(imageIcon);
@@ -120,8 +152,17 @@ public class ItemNav extends LinearLayout {
         }
 
         this.relativeLayout.addView(this.imageView);
+    }
 
-        addView(relativeLayout);
+    private void createRoundedImage(){
+        this.roundedImageView = new RoundedImageView(getContext());
+        this.roundedImageView.setId(new Random().nextInt(10));
+        this.roundedImageView.setPadding(5, 5, 5, 5);
+        this.roundedImageView.setLayoutParams(new RelativeLayout.LayoutParams(Util.convertDpToPixel(Util.VALUE_SIZE, getContext()), Util.convertDpToPixel(Util.VALUE_SIZE, getContext())));
+
+        updatePathImageProfile(this.pathImageProfile);
+
+        this.relativeLayout.addView(this.roundedImageView);
     }
 
     private void fileToImageView() {
@@ -163,20 +204,15 @@ public class ItemNav extends LinearLayout {
                     RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(res, myBitmap);
                     dr.setCornerRadius(Math.max(myBitmap.getWidth(), myBitmap.getHeight()) / 2.0f);
 
-                    RoundedImageView roundView = new RoundedImageView(getContext());
-                    roundView.setImageDrawable(dr);
-                    roundView.setLayoutParams(this.imageView.getLayoutParams());
-                    roundView.setId(this.imageView.getId());
-                    roundView.setPadding(
-                            this.imageView.getPaddingLeft(), this.imageView.getPaddingTop(),
-                            this.imageView.getPaddingRight(),this.imageView.getPaddingBottom()
-                    );
+                    if(this.imageView != null){
+                        removeView(this.imageView);
+                    }
 
-                    removeView(this.imageView);
+                    if(this.roundedImageView == null){
+                        createRoundedImage();
+                    }
 
-                    this.imageView = roundView;
-
-                    addView(imageView);
+                    this.roundedImageView.setImageDrawable(dr);
                 }
             } else {
                 setIconInImageView(imageIcon);
