@@ -51,7 +51,7 @@ public class BottomNav extends LinearLayout {
                 final int position = i;
 
                 if (position == 0) {
-                    item.selectColor();
+                    item.select();
                 }
 
                 item.setOnClickListener(new OnClickListener() {

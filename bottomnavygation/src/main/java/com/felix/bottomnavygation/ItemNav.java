@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.felix.bottomnavygation.Util.RoundedImageView;
 import com.felix.bottomnavygation.Util.Util;
 
 import java.io.File;
@@ -161,7 +162,18 @@ public class ItemNav extends LinearLayout {
                     Resources res = getResources();
                     RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(res, myBitmap);
                     dr.setCornerRadius(Math.max(myBitmap.getWidth(), myBitmap.getHeight()) / 2.0f);
-                    this.imageView.setImageDrawable(dr);
+
+                    RoundedImageView roundView = new RoundedImageView(getContext());
+                    roundView.setLayoutParams(this.imageView.getLayoutParams());
+                    roundView.setId(this.imageView.getId());
+                    roundView.setPadding(
+                            this.imageView.getPaddingLeft(), this.imageView.getPaddingTop(),
+                            this.imageView.getPaddingRight(),this.imageView.getPaddingBottom()
+                    );
+
+                    roundView.setImageDrawable(dr);
+
+                    this.imageView = roundView;
                 }
             } else {
                 setIconInImageView(imageIcon);
@@ -222,15 +234,19 @@ public class ItemNav extends LinearLayout {
 
     public void select() {
 
-        if (this.pathImageProfile == null || (this.pathImageProfile != null && this.pathImageProfile.trim().equals(""))) {
+        if (dontHaveProfilePick()) {
             selectColor();
         }
 
-        if(this.imageIconActive != 0){
+        if(this.imageIconActive != 0 && dontHaveProfilePick()){
             setIconInImageView(this.imageIconActive);
         }
 
         doBounceAnimation();
+    }
+
+    private boolean dontHaveProfilePick(){
+        return this.pathImageProfile == null || (this.pathImageProfile != null && this.pathImageProfile.trim().equals(""));
     }
 
     public void selectColor() {
