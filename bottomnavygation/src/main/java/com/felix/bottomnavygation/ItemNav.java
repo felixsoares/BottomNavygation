@@ -130,7 +130,7 @@ public class ItemNav extends LinearLayout {
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         this.relativeLayout.setLayoutParams(layoutParams);
 
-        if(isProfile()){
+        if(isProfile() && !dontHaveProfilePick()){
             createRoundedImage();
         }else {
             createImageView();
