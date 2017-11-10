@@ -1,10 +1,13 @@
 package com.felix.bottomnavygation;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.felix.bottomnavygation.Util.RoundedImageView;
 import com.felix.bottomnavygation.Util.Util;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
 import java.util.Random;
@@ -34,7 +37,7 @@ public class ItemNav extends LinearLayout {
 
     private Boolean isProfile = false;
 
-    private CircularImageView imageView;
+    private ImageView imageView;
     private RelativeLayout relativeLayout;
     private TextView textView;
 
@@ -105,7 +108,7 @@ public class ItemNav extends LinearLayout {
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         this.relativeLayout.setLayoutParams(layoutParams);
 
-        this.imageView = new CircularImageView(getContext());
+        this.imageView = new ImageView(getContext());
         this.imageView.setId(new Random().nextInt(10));
         this.imageView.setPadding(5,5,5,5);
         this.imageView.setLayoutParams(new RelativeLayout.LayoutParams(Util.convertDpToPixel(Util.VALUE_SIZE, getContext()), Util.convertDpToPixel(Util.VALUE_SIZE, getContext())));
@@ -129,8 +132,6 @@ public class ItemNav extends LinearLayout {
 
     private void setIconInImageView(int icon) {
         this.imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), icon));
-        this.imageView.setBorderColor(ContextCompat.getColor(getContext(), R.color.preto));
-        this.imageView.setBorderWidth(0);
     }
 
     // ***** INTERACTIONS ***** \\
@@ -158,13 +159,10 @@ public class ItemNav extends LinearLayout {
             if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(pathImage);
                 if (myBitmap != null) {
-                    this.imageView.setBorderColor(ContextCompat.getColor(getContext(), R.color.preto));
-                    this.imageView.setBorderWidth(8);
-                    /*Resources res = getResources();
+                    Resources res = getResources();
                     RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(res, myBitmap);
                     dr.setCornerRadius(Math.max(myBitmap.getWidth(), myBitmap.getHeight()) / 2.0f);
                     this.imageView.setImageDrawable(dr);
-                    */
                 }
             } else {
                 setIconInImageView(imageIcon);
