@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.felix.bottomnavygation.Util.RoundedImageView;
 import com.felix.bottomnavygation.Util.Util;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
 import java.util.Random;
@@ -27,6 +28,8 @@ import java.util.Random;
 
 public class ItemNav extends LinearLayout {
 
+    private int profileActive;
+    private int profileInactive;
     private int imageIcon;
     private int imageIconActive;
     private String titulo;
@@ -37,6 +40,7 @@ public class ItemNav extends LinearLayout {
 
     private Boolean isProfile = false;
 
+    private CircularImageView circularImageView;
     private ImageView imageView;
     private RelativeLayout relativeLayout;
     private TextView textView;
@@ -63,8 +67,8 @@ public class ItemNav extends LinearLayout {
 
     private void init(int imagem, String titulo, int imageIconActive) {
         this.imageIcon = imagem;
-        this.imageIconActive = imageIconActive;
         this.titulo = titulo;
+        this.imageIconActive = imageIconActive;
 
         addComponent();
     }
@@ -108,18 +112,34 @@ public class ItemNav extends LinearLayout {
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         this.relativeLayout.setLayoutParams(layoutParams);
 
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                Util.convertDpToPixel(Util.VALUE_SIZE, getContext()),
+                Util.convertDpToPixel(Util.VALUE_SIZE, getContext())
+        );
+
+        int id = new Random().nextInt(10);
+
         this.imageView = new ImageView(getContext());
-        this.imageView.setId(new Random().nextInt(10));
-        this.imageView.setPadding(5,5,5,5);
-        this.imageView.setLayoutParams(new RelativeLayout.LayoutParams(Util.convertDpToPixel(Util.VALUE_SIZE, getContext()), Util.convertDpToPixel(Util.VALUE_SIZE, getContext())));
+        this.imageView.setId(id);
+        this.imageView.setPadding(5, 5, 5, 5);
+        this.imageView.setLayoutParams(param);
+
+        this.circularImageView = new CircularImageView(getContext());
+        this.circularImageView.setId(id);
+        this.circularImageView.setPadding(5, 5, 5, 5);
+        this.circularImageView.setLayoutParams(param);
+        this.circularImageView.setBorderWidth(4);
+        this.circularImageView.setVisibility(GONE);
 
         setIconInImageView(imageIcon);
 
         if (this.colorInactive != 0) {
             this.imageView.setColorFilter(ContextCompat.getColor(getContext(), this.colorInactive), android.graphics.PorterDuff.Mode.MULTIPLY);
+            this.circularImageView.setBorderColor(ContextCompat.getColor(getContext(), this.colorInactive));
         }
 
         this.relativeLayout.addView(this.imageView);
+        this.relativeLayout.addView(this.circularImageView);
 
         addView(relativeLayout);
     }
@@ -131,7 +151,9 @@ public class ItemNav extends LinearLayout {
     }
 
     private void setIconInImageView(int icon) {
+        this.imageView.setVisibility(VISIBLE);
         this.imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), icon));
+        this.circularImageView.setVisibility(GONE);
     }
 
     // ***** INTERACTIONS ***** \\
@@ -159,15 +181,21 @@ public class ItemNav extends LinearLayout {
             if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(pathImage);
                 if (myBitmap != null) {
-                    Resources res = getResources();
-                    RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(res, myBitmap);
-                    dr.setCornerRadius(Math.max(myBitmap.getWidth(), myBitmap.getHeight()) / 2.0f);
-                    this.imageView.setImageDrawable(dr);
+
+                    if(this.colorInactive != 0){
+                        deselect();
+                    }
+
+                    this.imageView.setVisibility(GONE);
+                    this.circularImageView.setVisibility(VISIBLE);
+                    this.circularImageView.setImageBitmap(myBitmap);
                 }
             } else {
+                this.isProfile = false;
                 setIconInImageView(imageIcon);
             }
         } else {
+            this.isProfile = false;
             setIconInImageView(imageIcon);
         }
     }
@@ -182,8 +210,23 @@ public class ItemNav extends LinearLayout {
         return this;
     }
 
+    public ItemNav addProfileColorInative(int colorInative) {
+        this.profileInactive = colorInative;
+        return this;
+    }
+
+    public ItemNav addProfileColorAtive(int colorActive) {
+        this.profileActive = colorActive;
+        return this;
+    }
+
     public boolean isProfile() {
         return isProfile;
+    }
+
+    public ItemNav isProfileItem() {
+        this.isProfile = true;
+        return this;
     }
 
     public ItemNav setPathImageProfile(String path) {
@@ -194,48 +237,69 @@ public class ItemNav extends LinearLayout {
     }
 
     public void deselect() {
-
-        if(imageIconActive != 0 && dontHaveProfilePick()){
-            setIconInImageView(imageIcon);
-        }
-
-        if (this.colorInactive != 0) {
-            this.imageView.setColorFilter(ContextCompat.getColor(getContext(), this.colorInactive), android.graphics.PorterDuff.Mode.SRC_IN);
-
-            if (this.titulo != null && !this.titulo.equals("")) {
-                this.textView.setTextColor(ContextCompat.getColor(getContext(), this.colorInactive));
-            }
+        if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("")) {
+            selectInactiveColorProfile();
         } else {
-            this.imageView.setColorFilter(null);
+            if (imageIconActive != 0) {
+                setIconInImageView(imageIcon);
+            }
 
-            if (this.titulo != null && !this.titulo.equals("")) {
-                this.textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.black));
+            if (this.colorInactive != 0) {
+                this.imageView.setColorFilter(ContextCompat.getColor(getContext(), this.colorInactive), android.graphics.PorterDuff.Mode.SRC_IN);
+                this.circularImageView.setBorderColor(ContextCompat.getColor(getContext(), this.colorInactive));
+
+                if (this.titulo != null && !this.titulo.equals("")) {
+                    this.textView.setTextColor(ContextCompat.getColor(getContext(), this.colorInactive));
+                }
+            } else {
+                this.imageView.setColorFilter(null);
+                this.circularImageView.setBorderColor(0);
+
+                if (this.titulo != null && !this.titulo.equals("")) {
+                    this.textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.black));
+                }
             }
         }
 
         post(new Runnable() {
             @Override
             public void run() {
-                imageView.setLayoutParams(new RelativeLayout.LayoutParams(Util.convertDpToPixel(Util.VALUE_SIZE, getContext()), Util.convertDpToPixel(Util.VALUE_SIZE, getContext())));
+                RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                        Util.convertDpToPixel(Util.VALUE_SIZE, getContext()),
+                        Util.convertDpToPixel(Util.VALUE_SIZE, getContext())
+                );
+
+                imageView.setLayoutParams(param);
+                circularImageView.setLayoutParams(param);
             }
         });
     }
 
     public void select() {
 
-        if (dontHaveProfilePick()) {
-            selectColor();
-        }
-
-        if(this.imageIconActive != 0 && dontHaveProfilePick()){
-            setIconInImageView(this.imageIconActive);
+        if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("")) {
+            selectActiveColorProfile();
+        } else {
+            if (this.imageIconActive != 0) {
+                setIconInImageView(this.imageIconActive);
+            } else {
+                selectColor();
+            }
         }
 
         doBounceAnimation();
     }
 
-    private boolean dontHaveProfilePick(){
-        return this.pathImageProfile == null || (this.pathImageProfile != null && this.pathImageProfile.trim().equals(""));
+    public void selectInactiveColorProfile() {
+        if (this.profileInactive != 0) {
+            this.circularImageView.setBorderColor(ContextCompat.getColor(getContext(), this.profileInactive));
+        }
+    }
+
+    public void selectActiveColorProfile() {
+        if (this.profileActive != 0) {
+            this.circularImageView.setBorderColor(ContextCompat.getColor(getContext(), this.profileActive));
+        }
     }
 
     public void selectColor() {
@@ -252,7 +316,12 @@ public class ItemNav extends LinearLayout {
         post(new Runnable() {
             @Override
             public void run() {
-                imageView.setLayoutParams(new RelativeLayout.LayoutParams(Util.convertDpToPixel(Util.VALUE_SIZE_ACTIVE, getContext()), Util.convertDpToPixel(Util.VALUE_SIZE_ACTIVE, getContext())));
+                RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                        Util.convertDpToPixel(Util.VALUE_SIZE_ACTIVE, getContext()),
+                        Util.convertDpToPixel(Util.VALUE_SIZE_ACTIVE, getContext())
+                );
+                imageView.setLayoutParams(param);
+                circularImageView.setLayoutParams(param);
             }
         });
     }
