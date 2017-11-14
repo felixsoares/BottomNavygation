@@ -1,13 +1,10 @@
 package com.felix.bottomnavygation;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.felix.bottomnavygation.Util.RoundedImageView;
 import com.felix.bottomnavygation.Util.Util;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -39,6 +35,7 @@ public class ItemNav extends LinearLayout {
     private int colorActive;
 
     private Boolean isProfile = false;
+    private Boolean isActive;
 
     private CircularImageView circularImageView;
     private ImageView imageView;
@@ -182,8 +179,12 @@ public class ItemNav extends LinearLayout {
                 Bitmap myBitmap = BitmapFactory.decodeFile(pathImage);
                 if (myBitmap != null) {
 
-                    if(this.colorInactive != 0){
-                        deselect();
+                    if(this.isActive){
+                        select();
+                    }else{
+                        if(this.colorInactive != 0){
+                            deselect();
+                        }
                     }
 
                     this.imageView.setVisibility(GONE);
@@ -237,6 +238,8 @@ public class ItemNav extends LinearLayout {
     }
 
     public void deselect() {
+        this.isActive = false;
+
         if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("")) {
             selectInactiveColorProfile();
         } else {
@@ -276,6 +279,7 @@ public class ItemNav extends LinearLayout {
     }
 
     public void select() {
+        this.isActive = true;
 
         if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("")) {
             selectActiveColorProfile();
