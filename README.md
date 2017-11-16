@@ -54,7 +54,7 @@ bottomNav.build();
 
 ### Documentation
 
-1) With you want to add listeners
+1) Add listeners
 
 ```java
 bottomNav.setTabSelectedListener(listener);
@@ -72,7 +72,7 @@ BottomNav.OnTabSelectedListener listener = new BottomNav.OnTabSelectedListener()
 };
 ```
 
-2) With you want to add badge, create a BadgeIndicator and put in ItemNav.
+2) Add badge, create a BadgeIndicator and put in ItemNav.
 
 ```java
 BadgeIndicator badgeIndicator = new BadgeIndicator(this, android.R.color.holo_red_dark, android.R.color.white);
@@ -119,5 +119,13 @@ bottomNav.selectTab(0);
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
 bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore, R.mipmap.explore_ative));
+bottomNav.build();
+```
+
+8) Profile icon Active / Inative (change icon when select)
+
+```java
+BottomNav bottomNav = findViewById(R.id.bottomNav);
+bottomNav.addItemNav(new ItemNav(contexto, R.drawable.explore, R.drawable.explore_sel).isProfileItem().addProfileColorAtive(R.color.verdepadrao).addProfileColorInative(R.color.preto));
 bottomNav.build();
 ```
