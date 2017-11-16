@@ -1,4 +1,5 @@
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-BottomNavygation-green.svg?style=flat )]( https://android-arsenal.com/details/1/6463 )
+[![Release]( https://img.shields.io/badge/Release-v1.8.5-blue.svg?style=flat )]( https://jitpack.io/#felixsoares/BottomNavygation/ )
 
 # BottomNavygation
 
