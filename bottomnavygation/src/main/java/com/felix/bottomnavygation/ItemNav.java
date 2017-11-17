@@ -114,18 +114,16 @@ public class ItemNav extends LinearLayout {
                 Util.convertDpToPixel(Util.VALUE_SIZE, getContext())
         );
 
-        int id = new Random().nextInt(10);
-
         this.imageView = new ImageView(getContext());
-        this.imageView.setId(id);
+        this.imageView.setId(new Random().nextInt(100));
         this.imageView.setPadding(5, 5, 5, 5);
         this.imageView.setLayoutParams(param);
 
         this.circularImageView = new CircularImageView(getContext());
-        this.circularImageView.setId(id);
+        this.circularImageView.setId(new Random().nextInt(100));
         this.circularImageView.setPadding(5, 5, 5, 5);
         this.circularImageView.setLayoutParams(param);
-        this.circularImageView.setBorderWidth(4);
+        this.circularImageView.setBorderWidth(3);
         this.circularImageView.setVisibility(GONE);
 
         setIconInImageView(imageIcon);

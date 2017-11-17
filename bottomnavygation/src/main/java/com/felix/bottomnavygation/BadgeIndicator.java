@@ -45,11 +45,12 @@ public class BadgeIndicator extends RelativeLayout {
         setBackground(generateCircleDrawable(backgroundColor));
 
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(5,0,0,0);
+        //params.setMargins(5,0,0,0);
+        setPadding(5, 5, 5, 5);
         setLayoutParams(params);
 
         LayoutParams paramsText = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        paramsText.setMargins(10, 5, 10, 5);
+        //paramsText.setMargins(10, 5, 10, 5);
 
         this.textView = new TextView(getContext());
         this.textView.setLayoutParams(paramsText);
@@ -82,10 +83,12 @@ public class BadgeIndicator extends RelativeLayout {
             if (value <= 0) {
                 show(false);
             } else {
+
                 if (value > 100) {
                     value = 99;
                 }
-                this.textView.setText(value + "");
+
+                this.textView.setText(value < 10 ? "0" + value : value + "");
                 show(true);
             }
         }
