@@ -5,12 +5,6 @@
 
 Bottom Navigation based on Bottom Navigation View from Android
 
-![Profile tab selected](https://image.ibb.co/b32ACm/Whats_App_Image_2017_11_17_at_10_52_28_1.jpg)
-
-![Tab with badge and icon change when ative](https://image.ibb.co/eEPe56/Whats_App_Image_2017_11_17_at_10_52_28_2.jpg)
-
-![Icon change color tint when ative](https://image.ibb.co/iK0adR/Whats_App_Image_2017_11_17_at_10_52_28.jpg)
-
 ### Getting Started
 
 Add it in your root build.gradle (Project module)
