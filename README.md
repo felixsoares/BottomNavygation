@@ -5,6 +5,8 @@
 
 Bottom Navigation based on Bottom Navigation View from Android
 
+![](https://image.ibb.co/i0zMk6/img1.jpg) ![](https://image.ibb.co/fu2wJR/img2.jpg) ![](https://image.ibb.co/bSEXsm/img3.jpg)
+
 ### Getting Started
 
 Add it in your root build.gradle (Project module)
