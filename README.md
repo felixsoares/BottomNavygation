@@ -1,5 +1,5 @@
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-BottomNavygation-green.svg?style=flat )]( https://android-arsenal.com/details/1/6463 )
-[![Release]( https://img.shields.io/badge/Release-v1.8.5-blue.svg?style=flat )]( https://jitpack.io/#felixsoares/BottomNavygation/ )
+[![Release]( https://img.shields.io/badge/Release-v1.8.6-blue.svg?style=flat )]( https://jitpack.io/#felixsoares/BottomNavygation/ )
 
 # BottomNavygation
 
@@ -22,13 +22,13 @@ Add the dependency in build.gradle (App module)
 
 ```gradle
 dependencies {
-	compile 'com.github.felixsoares:BottomNavygation:1.8.5'
+	compile 'com.github.felixsoares:BottomNavygation:1.8.6'
 }
 ```
 
 ## Usage example
 
-In your layout file
+In layout file
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -46,7 +46,7 @@ In your layout file
 </RelativeLayout>
 ```
 
-In your Activity or Fragment
+In Activity or Fragment
 
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
@@ -57,7 +57,7 @@ bottomNav.build();
 
 ### Documentation
 
-1) Add listeners
+1) Support click and longClick listeners (just in case if ItemNav is profile item).
 
 ```java
 bottomNav.setTabSelectedListener(listener);
@@ -75,7 +75,7 @@ BottomNav.OnTabSelectedListener listener = new BottomNav.OnTabSelectedListener()
 };
 ```
 
-2) Add badge, create a BadgeIndicator and put in ItemNav.
+2) Support to add badge in ItemNav.
 
 ```java
 BadgeIndicator badgeIndicator = new BadgeIndicator(this, android.R.color.holo_red_dark, android.R.color.white);
@@ -85,13 +85,13 @@ bottomNav.addItemNav(new ItemNav(this, R.mipmap.feed).addColorAtive(R.color.colo
 bottomNav.build();
 ```
 
-3) Update badge
+3) Update badge.
 
 ```java
 badgeIndicator.updateCount(count);
 ```
 
-4) With you want to add profile photo int ItemNav
+4) Support to add profile photo int ItemNav.
 
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
@@ -99,7 +99,7 @@ bottomNav.addItemNav(new ItemNav(this, R.mipmap.perfil).addColorAtive(R.color.co
 bottomNav.build();
 ```
 
-5) Ative and Inative color tab
+5) Support to ative and inative colors in tab.
 
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
@@ -107,7 +107,7 @@ bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore).addColorAtive(R.color.c
 bottomNav.build();
 ```
 
-6) Select especific Tab
+6) Support to select especific Tab.
 
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
@@ -117,7 +117,7 @@ bottomNav.build();
 bottomNav.selectTab(0);
 ```
 
-7) Icon tab Active (change icon when select)
+7) Support to change icon when is ative.
 
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
@@ -125,7 +125,7 @@ bottomNav.addItemNav(new ItemNav(this, R.mipmap.explore, R.mipmap.explore_ative)
 bottomNav.build();
 ```
 
-8) Profile icon Active / Inative (change icon when select)
+8) Support to change color of border from profile photo when is ative or inative.
 
 ```java
 BottomNav bottomNav = findViewById(R.id.bottomNav);
