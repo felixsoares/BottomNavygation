@@ -98,7 +98,7 @@ public class BottomNav extends LinearLayout {
         Util.VALUE_SIZE = dp + 5;
     }
 
-    public void deselectAll() {
+    private void deselectAll() {
         for (ItemNav itemNav : this.itens) {
             itemNav.deselect();
         }

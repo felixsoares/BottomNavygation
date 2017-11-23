@@ -264,7 +264,7 @@ public class ItemNav extends LinearLayout {
     public void deselect() {
         this.isActive = false;
 
-        if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("")) {
+        if (isProfile()) {
             selectInactiveColorProfile();
         } else {
             if (imageIconActive != 0) {
