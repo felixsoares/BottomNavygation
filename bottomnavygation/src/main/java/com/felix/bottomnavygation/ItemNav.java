@@ -214,6 +214,7 @@ public class ItemNav extends LinearLayout {
                             .load(pathImage)
                             .placeholder(ContextCompat.getDrawable(getContext(), imageIcon))
                             .error(ContextCompat.getDrawable(getContext(), imageIcon))
+                            .memoryPolicy(MemoryPolicy.NO_CACHE)
                             .into(this.circularImageView);
                 } else {
                     this.isProfile = false;
