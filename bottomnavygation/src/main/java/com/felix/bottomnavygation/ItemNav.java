@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.felix.bottomnavygation.Util.Util;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.Random;
@@ -177,10 +179,10 @@ public class ItemNav extends LinearLayout {
                 Bitmap myBitmap = BitmapFactory.decodeFile(pathImage);
                 if (myBitmap != null) {
 
-                    if(this.isActive){
+                    if (this.isActive) {
                         select();
-                    }else{
-                        if(this.colorInactive != 0){
+                    } else {
+                        if (this.colorInactive != 0) {
                             deselect();
                         }
                     }
@@ -190,8 +192,33 @@ public class ItemNav extends LinearLayout {
                     this.circularImageView.setImageBitmap(myBitmap);
                 }
             } else {
-                this.isProfile = false;
-                setIconInImageView(imageIcon);
+                if (pathImage.contains("https") ||
+                        pathImage.contains("http") ||
+                        pathImage.contains("www.") ||
+                        pathImage.contains(".jpg") ||
+                        pathImage.contains(".png")) {
+
+                    this.imageView.setVisibility(GONE);
+                    this.circularImageView.setVisibility(VISIBLE);
+
+                    if (this.isActive) {
+                        select();
+                    } else {
+                        if (this.colorInactive != 0) {
+                            deselect();
+                        }
+                    }
+
+                    Picasso
+                            .with(getContext())
+                            .load(pathImage)
+                            .placeholder(ContextCompat.getDrawable(getContext(), imageIcon))
+                            .error(ContextCompat.getDrawable(getContext(), imageIcon))
+                            .into(this.circularImageView);
+                } else {
+                    this.isProfile = false;
+                    setIconInImageView(imageIcon);
+                }
             }
         } else {
             this.isProfile = false;

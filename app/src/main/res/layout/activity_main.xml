@@ -65,6 +65,12 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/btnAddUrlPhoto"
+                android:text="ADD PHOTO URL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
                 android:id="@+id/btnRemovePhoto"
                 android:text="REMOVE PHOTO"
                 android:layout_width="wrap_content"
