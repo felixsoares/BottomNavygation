@@ -217,12 +217,10 @@ public class ItemNav extends LinearLayout {
                             .memoryPolicy(MemoryPolicy.NO_CACHE)
                             .into(this.circularImageView);
                 } else {
-                    this.isProfile = false;
                     setIconInImageView(imageIcon);
                 }
             }
         } else {
-            this.isProfile = false;
             setIconInImageView(imageIcon);
         }
     }
