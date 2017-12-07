@@ -3,6 +3,7 @@ package com.felix.bottomnavygation;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -13,12 +14,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.felix.bottomnavygation.Util.Util;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by user on 07/11/2017.
@@ -32,10 +40,13 @@ public class ItemNav extends LinearLayout {
     private int imageIconActive;
     private String titulo;
     private String pathImageProfile;
+    private String apiKey;
+    private String authorization;
 
     private int colorInactive;
     private int colorActive;
 
+    private Boolean isError = false;
     private Boolean isProfile = false;
     private Boolean isActive;
 
@@ -143,7 +154,7 @@ public class ItemNav extends LinearLayout {
 
     private void fileToImageView() {
         if (this.isProfile && this.pathImageProfile != null && !this.pathImageProfile.trim().equals("")) {
-            updatePathImageProfile(pathImageProfile);
+            updatePathImageProfile(pathImageProfile, apiKey, authorization);
         }
     }
 
@@ -170,8 +181,10 @@ public class ItemNav extends LinearLayout {
         return this;
     }
 
-    public void updatePathImageProfile(String pathImage) {
+    public void updatePathImageProfile(String pathImage, final String apiKey, final String authorization) {
         this.pathImageProfile = pathImage;
+        this.apiKey = apiKey;
+        this.authorization = authorization;
 
         if (pathImage != null && !pathImage.equals("")) {
             File imgFile = new File(pathImage);
@@ -209,8 +222,34 @@ public class ItemNav extends LinearLayout {
                         }
                     }
 
-                    Picasso
-                            .with(getContext())
+                    OkHttpClient clientHttp = new OkHttpClient.Builder()
+                            .addInterceptor(new Interceptor() {
+                                @Override
+                                public Response intercept(Chain chain) throws IOException {
+                                    Request originalRequest = chain.request();
+
+                                    Request compressedRequest = originalRequest.newBuilder()
+                                            .addHeader("api-key", apiKey)
+                                            .addHeader("Authorization", authorization)
+                                            .addHeader("Content-Type", "application/json")
+                                            .build();
+
+                                    return chain.proceed(compressedRequest);
+                                }
+                            })
+                            .build();
+
+                    Picasso picasso = new Picasso.Builder(getContext())
+                            .downloader(new OkHttp3Downloader(clientHttp))
+                            .listener(new Picasso.Listener() {
+                                @Override
+                                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                                    isError = true;
+                                }
+                            })
+                            .build();
+
+                    picasso
                             .load(pathImage)
                             .placeholder(ContextCompat.getDrawable(getContext(), imageIcon))
                             .error(ContextCompat.getDrawable(getContext(), imageIcon))
@@ -305,7 +344,7 @@ public class ItemNav extends LinearLayout {
     public void select() {
         this.isActive = true;
 
-        if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("")) {
+        if (isProfile() && pathImageProfile != null && !pathImageProfile.trim().equals("") && !isError) {
             selectActiveColorProfile();
         } else {
             if (this.imageIconActive != 0) {
