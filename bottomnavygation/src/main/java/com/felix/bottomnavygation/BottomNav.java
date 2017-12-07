@@ -104,10 +104,10 @@ public class BottomNav extends LinearLayout {
         }
     }
 
-    public void updateImageProfile(String path) {
+    public void updateImageProfile(String path, String api, String token) {
         for (ItemNav itemNav : this.itens) {
             if (itemNav.isProfile()) {
-                itemNav.updatePathImageProfile(path, "", "");
+                itemNav.updatePathImageProfile(path, api, token);
             }
         }
     }
