@@ -13,12 +13,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.felix.bottomnavygation.Util.Util;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by user on 07/11/2017.
@@ -32,6 +40,8 @@ public class ItemNav extends LinearLayout {
     private int imageIconActive;
     private String titulo;
     private String pathImageProfile;
+    private String apikey;
+    private String authorization;
 
     private int colorInactive;
     private int colorActive;
@@ -143,7 +153,7 @@ public class ItemNav extends LinearLayout {
 
     private void fileToImageView() {
         if (this.isProfile && this.pathImageProfile != null && !this.pathImageProfile.trim().equals("")) {
-            updatePathImageProfile(pathImageProfile);
+            updatePathImageProfile(pathImageProfile, authorization, apikey);
         }
     }
 
@@ -170,8 +180,10 @@ public class ItemNav extends LinearLayout {
         return this;
     }
 
-    public void updatePathImageProfile(String pathImage) {
+    public void updatePathImageProfile(String pathImage, String authorization, String apikey) {
         this.pathImageProfile = pathImage;
+        this.authorization = authorization;
+        this.apikey = apikey;
 
         if (pathImage != null && !pathImage.equals("")) {
             File imgFile = new File(pathImage);
@@ -209,8 +221,15 @@ public class ItemNav extends LinearLayout {
                         }
                     }
 
-                    Picasso
-                            .with(getContext())
+                    OkHttpClient clientHttp = new OkHttpClient.Builder()
+                            .addInterceptor(new IntereceporMain(authorization, apikey))
+                            .build();
+
+                    Picasso picasso = new Picasso.Builder(getContext())
+                            .downloader(new OkHttp3Downloader(clientHttp))
+                            .build();
+
+                    picasso
                             .load(pathImage)
                             .placeholder(ContextCompat.getDrawable(getContext(), imageIcon))
                             .error(ContextCompat.getDrawable(getContext(), imageIcon))
@@ -222,6 +241,29 @@ public class ItemNav extends LinearLayout {
             }
         } else {
             setIconInImageView(imageIcon);
+        }
+    }
+
+    private class IntereceporMain implements Interceptor {
+
+        private String authorization, apikey;
+
+        public IntereceporMain(String authorization, String apikey) {
+            this.apikey = apikey;
+            this.authorization = authorization;
+        }
+
+        @Override
+        public Response intercept(Interceptor.Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+
+
+            Request compressedRequest = originalRequest.newBuilder()
+                    .addHeader("api-key", this.apikey)
+                    .addHeader("Authorization", this.authorization)
+                    .build();
+
+            return chain.proceed(compressedRequest);
         }
     }
 
