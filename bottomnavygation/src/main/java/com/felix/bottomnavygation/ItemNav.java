@@ -245,6 +245,19 @@ public class ItemNav extends LinearLayout {
                                 @Override
                                 public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
                                     isError = true;
+
+                                    imageView.setVisibility(VISIBLE);
+                                    circularImageView.setVisibility(GONE);
+
+                                    if (isActive) {
+                                        select();
+                                    } else {
+                                        if (colorInactive != 0) {
+                                            deselect();
+                                        }
+                                    }
+
+                                    setIconInImageView(imageIcon);
                                 }
                             })
                             .build();
@@ -303,7 +316,7 @@ public class ItemNav extends LinearLayout {
     public void deselect() {
         this.isActive = false;
 
-        if (isProfile()) {
+        if (isProfile() && !isError) {
             selectInactiveColorProfile();
         } else {
             if (imageIconActive != 0) {

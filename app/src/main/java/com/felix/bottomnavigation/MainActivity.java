@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         btnRemovePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomNav.updateImageProfile("");
+                bottomNav.updateImageProfile("", "", "");
             }
         });
 
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         "https://s2.glbimg.com/-MOhHTFpCjSKT0CTgq_2S5SfG1U=/810x456/top/smart/https://i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2017/2/0/nwOVrJQlqdPBKPzKaXzQ/170578-ferrari-portofino.jpg"
                 };
 
-                bottomNav.updateImageProfile(array[new Random().nextInt(4)]);
+                bottomNav.updateImageProfile(array[new Random().nextInt(4)], "", "");
             }
         });
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                 String path = saveProfilePhoto(bitmap);
-                bottomNav.updateImageProfile(path);
+                bottomNav.updateImageProfile(path, "", "");
             } catch (Exception e){
                 e.printStackTrace();
             }
